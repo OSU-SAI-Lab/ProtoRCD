@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "protorcd-pipeline"
+version = "0.1.0"
+description = "SAM3 detection -> DINOv3/BioCLIP-2 features -> active prototype triage, decoupled from ground-truth boxes for UI integration."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "scikit-learn>=1.2",
+]
+
+# Stage 1 (SAM3 detection) and stage 2 (feature extraction) need the heavy ML stack.
+# Stage 3 (acquisition + triage) needs only numpy/scikit-learn, so it can run anywhere
+# (e.g. alongside a lightweight UI) without GPU deps.
+[project.optional-dependencies]
+detect = ["torch", "torchvision", "pillow", "opencv-python", "sahi", "pyyaml", "tqdm"]
+features = ["torch", "torchvision", "pillow", "open_clip_torch", "tqdm"]
+# Stage-3 HTTP service for an external UI (orchestration around the frozen triage core).
+serving = ["fastapi>=0.110", "uvicorn>=0.29", "pydantic>=2", "pillow", "httpx"]
+dev = ["pytest", "ruff>=0.4", "httpx"]
+
+[tool.setuptools.packages.find]
+include = ["protorcd_pipeline*", "serving*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+# 100 cols matches the existing code; 79 would force reflowing established modules.
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+# pycodestyle (E/W), pyflakes (F), isort (I), pyupgrade (UP), bugbear (B), comprehensions
+# (C4) -- the "latest PEP standards" surface without reformatting-only churn.
+select = ["E", "W", "F", "I", "UP", "B", "C4"]
+# E501 (line length) is enforced by the formatter, not the linter, to avoid flagging the
+# few long docstring/URL lines; keep the rest strict.
+ignore = ["E501"]
+
+[tool.ruff.format]
+docstring-code-format = true

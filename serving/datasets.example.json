@@ -1,0 +1,35 @@
+{
+  "_comment": "Example serving registry (portable schema, PLACEHOLDER paths). Copy to a real file OUTSIDE git (e.g. datasets_dryrun/serving_datasets.json, which is gitignored), fill in the actual paths for your deployment, then: export PROTORCD_SERVING_CONFIG=/abs/path/to/your.json && uvicorn serving.server:app. The client only ever sends the logical dataset NAME; it never sees these paths.",
+
+  "datasets": [
+    {
+      "_comment": "Single-split dataset: one feature-store dir per representation, one COCO (optional, for offline-GT labels/calibration), one image_root for crops.",
+      "name": "DATASET_A",
+      "bg_features": ["/path/to/DATASET_A/features/dinov3/box"],
+      "fg_features": ["/path/to/DATASET_A/features/bioclip/box"],
+      "coco": ["/path/to/DATASET_A/annotations/instances.json"],
+      "image_root": "/path/to/DATASET_A/images",
+      "iou_threshold": 0.25,
+
+      "_optional": {
+        "labels": {"1": "species_one", "2": "species_two"},
+        "labels_file": "/path/to/DATASET_A/taxonomy.json",
+        "density_cache": "/path/to/DATASET_A/density_seed3.npy"
+      }
+    },
+
+    {
+      "_comment": "Pooled multi-split dataset (e.g. train+test). List each split's feature store and COCO in order; split_tags names the splits. Because each split's proposal file_names are relative to a DIFFERENT image tree, use image_roots keyed by split tag (not a single image_root).",
+      "name": "DATASET_B",
+      "bg_features": ["/path/to/DATASET_B/features/train/dinov3/box", "/path/to/DATASET_B/features/test/dinov3/box"],
+      "fg_features": ["/path/to/DATASET_B/features/train/bioclip/box", "/path/to/DATASET_B/features/test/bioclip/box"],
+      "coco": ["/path/to/DATASET_B/annotations/train.json", "/path/to/DATASET_B/annotations/test.json"],
+      "split_tags": ["train", "test"],
+      "image_roots": {
+        "train": "/path/to/DATASET_B/images/train",
+        "test": "/path/to/DATASET_B/images/test"
+      },
+      "iou_threshold": 0.25
+    }
+  ]
+}

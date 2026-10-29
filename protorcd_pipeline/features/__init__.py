@@ -1,0 +1,2 @@
+"""Proposal embedding extraction utilities."""
+

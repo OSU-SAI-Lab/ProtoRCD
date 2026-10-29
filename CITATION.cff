@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "Training-Free Few-Shot Object Detection"
+version: "0.1.0"
+date-released: "2026-10"
+license: "BSD 3-Clause"
+authors:
+  - family-names: "Potlapally"
+    given-names: "Anirudh"
+    email: "potlapally.2@osu.edu"
+  - family-names: "Brunda Yogananda"
+    given-names: "Brijesh Nanda"
+    email: "brundayogananda.1@osu.edu"
+  - family-names: "Subramoni"
+    given-names: "Hari"
+    email: "subramoni.1@osu.edu"
+
+repository-code: "https://github.com/ICICLE-ai/Training-Free-Fewshot-Object-Detection"
+keywords:
+  - "open source"
+  - "scientific software"
+  - "ICICLE"
